@@ -1,6 +1,6 @@
 # src/train.py
 import pandas as pd
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -53,12 +53,23 @@ clf = Pipeline(steps=[
 # 6. Train/test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 7. Train model
-clf.fit(X_train, y_train)
+# 7. Hyperparameter tuning
+param_grid = {
+    "classifier__n_estimators": [100, 200, 500],
+    "classifier__max_depth": [None, 5, 10, 20],
+    "classifier__min_samples_split": [2, 5, 10]
+}
 
-# 8. Evaluate
-accuracy = clf.score(X_test, y_test)
-cv_scores = cross_val_score(clf, X, y, cv=5)
+grid_search = GridSearchCV(clf, param_grid, cv=5, n_jobs=-1, scoring="accuracy")
+grid_search.fit(X_train, y_train)
 
-print(f"Test Accuracy: {accuracy:.4f}")
+# 8. Best model
+best_model = grid_search.best_estimator_
+
+# 9. Evaluate
+test_accuracy = best_model.score(X_test, y_test)
+cv_scores = cross_val_score(best_model, X, y, cv=5)
+
+print("Best parameters:", grid_search.best_params_)
+print(f"Test Accuracy: {test_accuracy:.4f}")
 print(f"Cross-validation Accuracy: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
