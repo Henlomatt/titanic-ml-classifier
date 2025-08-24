@@ -1,5 +1,7 @@
 # src/train.py
+import os
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
@@ -10,12 +12,12 @@ from sklearn.ensemble import RandomForestClassifier
 # 1. Load data
 data = pd.read_csv("data/titanic.csv")
 
-# 2. Basic feature engineering
+# 2. Feature engineering
 data["FamilySize"] = data["SibSp"] + data["Parch"] + 1
 data["IsAlone"] = (data["FamilySize"] == 1).astype(int)
 data["Title"] = data["Name"].str.extract(" ([A-Za-z]+)\.", expand=False)
 
-# Reduce rare titles
+# Group rare titles
 rare_titles = data["Title"].value_counts()[data["Title"].value_counts() < 10].index
 data["Title"] = data["Title"].replace(rare_titles, "Rare")
 
@@ -73,3 +75,9 @@ cv_scores = cross_val_score(best_model, X, y, cv=5)
 print("Best parameters:", grid_search.best_params_)
 print(f"Test Accuracy: {test_accuracy:.4f}")
 print(f"Cross-validation Accuracy: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
+
+# 10. Save model
+os.makedirs("models", exist_ok=True)
+model_path = "models/titanic_best_model.pkl"
+joblib.dump(best_model, model_path)
+print(f"✅ Model saved to {model_path}")
