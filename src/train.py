@@ -8,14 +8,13 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
+from features import add_features
 
 # 1. Load data
 data = pd.read_csv("data/titanic.csv")
 
 # 2. Feature engineering
-data["FamilySize"] = data["SibSp"] + data["Parch"] + 1
-data["IsAlone"] = (data["FamilySize"] == 1).astype(int)
-data["Title"] = data["Name"].str.extract(" ([A-Za-z]+)\.", expand=False)
+data = add_features(data)
 
 # Group rare titles
 rare_titles = data["Title"].value_counts()[data["Title"].value_counts() < 10].index
