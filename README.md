@@ -98,3 +98,8 @@ python src/train.py
 * Package the pipeline with `scikit-learn` or `mlflow`.
 
 ---
+# Train the model
+python src/train.py
+
+# Make predictions on test data
+python src/predict.py --input data/test.csv --output predictions.csv
