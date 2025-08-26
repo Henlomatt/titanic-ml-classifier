@@ -4,5 +4,9 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.pythonPath": "C:/Users/l14/Programming/envs/titanic_env/python.exe",
+        "python.condaPath": "C:/Users/l14/Anaconda3/Scripts/conda.exe",
+        "python.terminal.activateEnvironment": true
+	}
 }
