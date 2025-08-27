@@ -54,7 +54,12 @@ License
 
 MIT License
 
+## 📝 Notebooks
 
+This repository includes interactive Jupyter notebooks demonstrating the full Titanic ML pipeline:
+
+- **[EDA](notebooks/eda.ipynb)** – Exploratory Data Analysis: visualizations, missing values, feature distributions, and correlations.
+- **[Model Evaluation](notebooks/model_evaluation.ipynb)** – Train and evaluate baseline and advanced models, including Logistic Regression and Random Forest, with performance metrics, confusion matrices, ROC curves, and feature importance analysis.
 ---
 
 
